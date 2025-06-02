@@ -1,17 +1,21 @@
 name: build-test-deploy
 on: push
+
 jobs: 
   build:
     runs-on: ubuntu-latest
     steps: 
-      - name: checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v3
-      - name: use node.js
+
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+
       - run: npm install
       - run: npm run build
+
   deploy:
     needs: build
 
@@ -27,17 +31,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: use node.js
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
       
-      - name: configure github pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
         with:
           static_site_generator: next
@@ -45,12 +49,11 @@ jobs:
       - run: npm install
       - run: npm run build
 
-      - name: upload artifacts
+      - name: Upload artifacts
         uses: actions/upload-pages-artifact@v1
         with: 
           path: "./out"
 
-      - name: deploy
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-  
